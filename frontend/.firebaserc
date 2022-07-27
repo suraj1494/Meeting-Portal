@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "meet-auth": {
+      "hosting": {
+        "meeting_portal": [
+          "meet-auth"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "meet-auth"
+  }
+}

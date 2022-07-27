@@ -1,0 +1,163 @@
+<div class="container1">
+    <app-header></app-header>
+            <div class="menu1">
+                <!-- side area-->
+                <br>
+                <div class="card">
+                    <div class="card-body" style="text-align:center">
+                        <p class="meet-schedular">Meeting Schedular</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="menu-list">
+                    <div class="card">
+                        <ul class="menu-ul">
+                        <ng-container>
+                            <ul class="menu-items"><a class="pointer" (click)="shiftToSchedule()" style="text-decoration:none;">Schedule</a></ul>
+                        </ng-container>
+                        <ul class="menu-items"><a class="pointer" (click)="shiftToAvailable()" style="text-decoration:none;">Meeting's Scheduled</a></ul>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Main meeting form component -->
+
+            <div class="main">
+                <!-- form  for meeting -->
+                <div *ngIf="meetingSchedule">
+                <!-- <div *ngIf="false"> -->
+                    <div class="container bg-light py-5">
+                        <h1 style="font-family:cursive; text-align:center">Welcome {{x}}</h1>
+                        <hr>
+                        <p>Please fill the following details to schedule a Meeting!</p>
+                        <form [formGroup]="meetingForm1" (ngSubmit)="submitMeetForm()" #meetingFrom1="ngForm">
+                            <mat-form-field class="form-group col-md-12" appearance="fill">
+                                <mat-label>Title of the Meeting</mat-label>
+                                <input matInput formControlName="title" class="form-control" required>
+                            </mat-form-field>
+                            <div class="form-row">
+                                <mat-form-field appearance="fill" class="form-group col-md-6">
+                                    <mat-label>Name of the Organizer</mat-label>
+                                    <input matInput type="text" formControlName="name">
+                                    <!-- <mat-error *ngIf="name.invalid">{{getErrorMessage()}}</mat-error> -->
+                                </mat-form-field>
+                                
+                                <mat-form-field appearance="fill" class="form-group col-md-6">
+                                    <mat-label>Enter your email</mat-label>
+                                    <input  matInput  type="email" formControlName="email" >
+                                    <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                                
+                            <div class="form-row">
+                            
+                                <mat-form-field class="form-group col-md-4" appearance="fill"  >
+                                    <input readonly matInput [matDatepicker]="myDatePicker" [matDatepickerFilter]="myFilter" (click)="myDatePicker.open()"  formControlName="meetingDate" [min]="minDate" (dateChange)="func1(meetingFrom1.value?.meetingDate)" required >
+                                    <mat-label>Select Meeting Date</mat-label>
+                                    <mat-datepicker-toggle [for]="myDatePicker" matSuffix [for]="myDatePicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #myDatePicker disabled="false" ></mat-datepicker>
+                                </mat-form-field>
+
+                                <ng-container>
+                                    <mat-form-field appearance="fill" class="form-group col-md-4">
+                                        <input  matInput [ngxTimepicker]="pickerST" [format]="24" [min]="currTime"  formControlName="meetingST"  readonly required>
+                                        <mat-label>Start Time</mat-label>
+                                        <ngx-material-timepicker-toggle [for]="pickerST"  matSuffix [for]="pickerST"></ngx-material-timepicker-toggle>
+                                        <ngx-material-timepicker #pickerST  ></ngx-material-timepicker>
+                                    </mat-form-field>
+                                </ng-container>
+                        
+                                <mat-form-field appearance="fill" class="form-group col-md-4">
+                                    <mat-label>End Time</mat-label>
+                                    <input matInput [ngxTimepicker]="pickerET" [format]="24" [min]="meetingForm1.value?.meetingST" formControlName="meetingET" readonly required>
+                                    <ngx-material-timepicker-toggle [for]="pickerET" matSuffix [for]="pickerET"></ngx-material-timepicker-toggle>
+                                    <ngx-material-timepicker #pickerET ></ngx-material-timepicker>
+                                </mat-form-field>
+
+                            </div>
+                
+                            <div class="center-btn">
+                                <button type="submit" [disabled]="!meetingForm1.valid" class="btn btn-info">Get Space</button>
+                            </div>
+                        </form>
+                        
+                        <ng-container
+                            *ngIf="len==0; then currDate; else otherDate">
+                            
+                        </ng-container>
+                      
+                        <ng-template #currDate>
+                            
+                                <ng-container *ngIf="meetform2">
+                                <!-- <ng-container> -->
+                                    <form [formGroup]="meetingForm2" (ngSubmit)="submitMeetForm2()" #meetingFrom2="ngForm">
+                                        <div class="radio-flex">
+                                            <div class="center-btn" style="margin-top:20px; margin-right:10px;">
+                                                <p class="para">Space Available</p>
+                                            </div>
+                                        
+                                            <div  *ngIf="space1==1">  
+                                            <!-- <div> -->
+                                                <div class="form-group col-md-1" style="margin-top:10px;">
+                                                    <label for="space">C1</label>
+                                                    <input type="radio" formControlName="space"  id="space" class="from-control" value="1" required>
+                                                </div>
+                                            </div>
+                                            <div  *ngIf="space2==2">
+                                            <!-- <div> -->
+                                                <div class="form-group col-md-1" style="margin-top:10px;">
+                                                    <label for="space">C2</label>
+                                                    <input type="radio" formControlName="space"  id="space" class="from-control" value="2" required>
+                                                </div>
+                                            </div>
+                                        </div>   
+                                        <div class="center-btn">
+                                            <button type="submit" [disabled]="!meetingForm2.valid" class="btn btn-success">Schedule Meeting</button>  
+                                            
+                                        </div>     
+                                    </form>
+                                </ng-container>
+                            
+                        </ng-template>
+                        
+                        <ng-template #otherDate>
+                            
+                                <ng-container *ngIf="meetform2">
+                                <!-- <ng-container> -->
+                                    <form [formGroup]="meetingForm2" (ngSubmit)="submitMeetForm2()" #meetingFrom2="ngForm">
+                                        <div class="radio-flex">
+                                            <div class="center-btn" style="margin-top:20px; margin-right:10px;">
+                                                <p class="para">Space Available</p>
+                                            </div>
+                                           
+                                            <div  *ngIf="space1==2"> 
+                                            <!-- <div> -->
+                                                <div class="form-group col-md-1" style="margin-top:10px;">
+                                                    <label for="space">C1</label>
+                                                    <input type="radio" formControlName="space"  id="space" class="from-control" value="1" required>
+                                                </div>
+                                            </div>
+                                            <div  *ngIf="space2==1">
+                                            <!-- <div> -->
+                                                <div class="form-group col-md-1" style="margin-top:10px;">
+                                                    <label for="space">C2</label>
+                                                    <input type="radio" formControlName="space"  id="space" class="from-control" value="2" required>
+                                                </div>
+                                            </div>
+                                        </div> 
+
+                                        <div class="center-btn">
+                                            <button type="submit" [disabled]="!meetingForm2.valid" class="btn btn-success">Schedule Meeting</button>
+                                        </div>     
+                                    </form>
+                                </ng-container>
+                           
+                        </ng-template>
+                    </div> 
+                </div>
+                <div *ngIf="availableMeeting">
+                <!-- <div *ngIf="true"> -->
+                    <app-available-meet></app-available-meet>
+                </div>
+            </div>
+</div>
