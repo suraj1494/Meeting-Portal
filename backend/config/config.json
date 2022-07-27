@@ -1,6 +1,6 @@
 {
     "host":"localhost",
     "user":"root",
-    "database":"meet_app",
-    "password":"Suraj@8650"
+    "database":"NAME_OF_THE_DATABASE",
+    "password":"PASSWORD_OF_MYSQL_DB"
 }
